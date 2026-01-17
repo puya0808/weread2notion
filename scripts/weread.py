@@ -370,27 +370,13 @@ def get_cookie():
     
 
 
-def extract_page_id():
-    url = os.getenv("NOTION_PAGE")
-    if not url:
-        url = os.getenv("NOTION_DATABASE_ID")
-    if not url:
-        raise Exception("没有找到NOTION_PAGE，请按照文档填写")
-    # 正则表达式匹配 32 个字符的 Notion page_id
-    match = re.search(
-        r"([a-f0-9]{32}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})",
-        url,
-    )
-    if match:
-        return match.group(0)
-    else:
-        raise Exception(f"获取NotionID失败，请检查输入的Url是否正确")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
     weread_cookie = get_cookie()
-    database_id = extract_page_id()
+    database_id = os.getenv("NOTION_TOKEN")
     notion_token = os.getenv("NOTION_TOKEN")
     session = requests.Session()
     session.cookies = parse_cookie_string(weread_cookie)
